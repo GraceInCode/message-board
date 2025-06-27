@@ -1,0 +1,16 @@
+<h1><%= title %></h1>
+
+<form method="POST" action="/new">
+    <div class="form-group">
+        <label for="messageUser">Your Name:</label>
+        <input type="text" id="messageUser" name="messageUser" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="messageText">Message:</label>
+        <textarea id="messageText" name="messageText" placeholder="Enter your message here..." required></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-success">Send Message</button>
+    <a href="/" class="btn">Cancel</a>
+</form>
