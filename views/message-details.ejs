@@ -1,0 +1,13 @@
+<h1>Message Details</h1>
+
+<div class="message">
+    <div class="message-header">
+        <span class="message-user"><%= message.user %></span>
+        <span class="message-date"><%= message.added.toLocaleDateString() %> at <%= message.added.toLocaleTimeString() %></span>
+    </div>
+    <div class="message-text"><%= message.text %></div>
+</div>
+
+<div class="nav-links">
+    <a href="/" class="btn">Back to Messages</a>
+</div>
