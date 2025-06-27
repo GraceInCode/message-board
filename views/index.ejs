@@ -1,0 +1,22 @@
+<h1><%= title %></h1>
+
+<div class="nav-links">
+    <a href="/new" class="btn btn-success">Add New Message</a>
+</div>
+
+<% if (messages.length > 0) { %>
+    <% messages.forEach((message, index) => { %>
+        <div class="message">
+            <div class="message-header">
+                <span class="message-user"><%= message.user %></span>
+                <span class="message-date"><%= message.added.toLocaleDateString() %> at <%= message.added.toLocaleTimeString() %></span>
+            </div>
+            <div class="message-text"><%= message.text %></div>
+            <div style="margin-top: 10px;">
+                <a href="/message/<%= index %>" class="btn">Open</a>
+            </div>
+        </div>
+    <% }) %>
+<% } else { %>
+    <p>No messages yet. <a href="/new">Add the first one!</a></p>
+<% } %>
