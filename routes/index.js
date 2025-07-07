@@ -1,65 +1,80 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController');
 
-const messages = [
-    {
-        text: "Hi there!",
-        user: "Amando",
-        added: new Date()
-    },
-    {
-        text: "Hello World!",
-        user: "Charles",
-        added: new Date()
-    }
-];
 
 // Index route - show all messages
 
-router.get('/', (req, res) => {
-    res.render('index', {
-        title: 'Mini Message Board',
-        messages: messages
-    });
-});
-
-// New message form route
-router.get('/message/:id', (req, res) => {
-    const messageId = parseInt(req.params.id);
-    const message = messages[messageId]
-
-    if (message) {
-        res.render('message-details', {
-            title: 'Message Details',
-            message: message,
-            messageId: messageId
+router.get('/', async (req, res) => {
+    try {
+        const messages = await userController.getAllMessages()
+        res.render('index', {
+            title: 'Mini Message Board',
+            messages: messages
         })
-    } else {
-        res.status(404).render('error', {
-            title: 'Not Found',
-            error: 'Message not found'
-        })
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+        res.status(500).render('error', {
+            title: 'Error',
+            error: 'Could not fetch messages'
+        });
     }
 })
 
+// Show individual message by ID
+router.get('/message/:id', async (req, res) => {
+    const messageId = parseInt(req.params.id);
+    try {
+        const message = await userController.getMessagesById(messageId);
+        if (message) {
+            res.render('message-details', {
+                title: 'Message Details',
+                message: message,
+                messageId: messageId
+            });
+        } else {
+            res.status(404).render('error', {
+                title: 'Not Found',
+                error: 'Message not found'
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching message:', error);
+        res.status(500).render('error', {
+            title: 'Error',
+            error: 'Could not fetch message'
+        });
+    }
+});
+
+
+// New message form
 router.get('/new', (req, res) => {
     res.render('form', {
         title: 'New Message'
     })
 })
 
-router.post('/new', (req, res) => {
+// add new message
+router.post('/new', async (req, res) => {
     const { messageUser, messageText } = req.body;
-
     if (messageUser && messageText) {
-        messages.push({
-            user: messageUser,
-            text: messageText,
-            added: new Date()
-        })
+        try {
+            await userController.addMessage(messageText, messageUser);
+            res.redirect('/');
+        } catch (error) {
+            console.error('Error adding message:', error);
+            res.status(500).render('error', {
+                title: 'Error',
+                error: 'Could not add message'
+            });
+        }
+    } else {
+        res.status(400).render('error', {
+            title: 'Bad Request',
+            error: 'Message user and text are required'
+        });
     }
-
-    res.redirect('/');
 })
 
 module.exports = router;
