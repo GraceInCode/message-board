@@ -5,18 +5,18 @@
 </div>
 
 <% if (messages.length > 0) { %>
-    <% messages.forEach((message, index) => { %>
+    <% messages.forEach(message => { %>
         <div class="message">
             <div class="message-header">
-                <span class="message-user"><%= message.user %></span>
-                <span class="message-date"><%= message.added.toLocaleDateString() %> at <%= message.added.toLocaleTimeString() %></span>
+                <span class="message-user"><%= message.username %></span>
+                <span class="message-date"> at <%= message.added %></span>
             </div>
-            <div class="message-text"><%= message.text %></div>
+            <div class="message-text"><%= message.content %></div>
             <div style="margin-top: 10px;">
-                <a href="/message/<%= index %>" class="btn">Open</a>
+                <a href="/message/<%= message.id %>" class="btn">Open</a>
             </div>
         </div>
     <% }) %>
 <% } else { %>
-    <p>No messages yet. <a href="/new">Add the first one!</a></p>
+    <p>No messages yet. Add the first one!</p>
 <% } %>
